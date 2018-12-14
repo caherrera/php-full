@@ -2,15 +2,15 @@ language: bash
 services: docker
 
 env:
-  - VARIANT=7.0/fpm
+  # - VARIANT=7.0/fpm
   - VARIANT=7.0/fpm-alpine
-  - VARIANT=7.0/cli
-  - VARIANT=7.1/fpm
+  # - VARIANT=7.0/cli
+  # - VARIANT=7.1/fpm
   - VARIANT=7.1/fpm-alpine
-  - VARIANT=7.1/cli
-  - VARIANT=7.2/fpm
+  # - VARIANT=7.1/cli
+  # - VARIANT=7.2/fpm
   - VARIANT=7.2/fpm-alpine
-  - VARIANT=7.2/cli
+  # - VARIANT=7.2/cli
 
 install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images
