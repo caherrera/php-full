@@ -39,3 +39,5 @@ RUN { \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 VOLUME /var/www/html
+WORKDIR /var/www/html
+
