@@ -38,6 +38,7 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
+RUN apk add --no-cache $PHPIZE_DEPS
 RUN pecl install xdebug
 RUN pecl install redis
 
