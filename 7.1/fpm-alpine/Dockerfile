@@ -72,7 +72,7 @@ RUN apk add --no-cache \
 	git \
 	openssh-client
 
-RUN rm -rf /tmp/pear ~/.pearrc
+RUN rm -rf /tmp/* ~/.pearrc
 RUN rm -rf /usr/src/*
 
 VOLUME /var/www/html
