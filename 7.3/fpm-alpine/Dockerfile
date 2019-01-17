@@ -24,8 +24,7 @@ RUN set -ex; \
 	RUN docker-php-ext-install curl
 	RUN docker-php-ext-install ftp gd
 	RUN docker-php-ext-install json mbstring
-	RUN docker-php-ext-configure mcrypt
-	RUN docker-php-ext-install mcrypt opcache pcntl
+	RUN docker-php-ext-install opcache pcntl
 
 	RUN docker-php-ext-install mysqli
 
