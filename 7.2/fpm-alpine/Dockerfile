@@ -17,7 +17,9 @@ RUN set -ex; \
 		libxml2-dev \
 		libmcrypt-dev \
 		git \
+		postgresql-dev \
 	;
+
 	RUN docker-php-ext-configure curl;
 	RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd;
 	RUN docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;
