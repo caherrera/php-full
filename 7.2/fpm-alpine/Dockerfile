@@ -19,23 +19,23 @@ RUN set -ex; \
 		git \
 	;
 	RUN docker-php-ext-configure curl;
-        RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd;
+	RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd;
 	RUN docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;
+	
 	RUN docker-php-ext-install bcmath
 	RUN docker-php-ext-install curl
-	RUN docker-php-ext-install ftp gd
+	RUN docker-php-ext-install gd
 	RUN docker-php-ext-install json mbstring
-	RUN docker-php-ext-configure mcrypt
-	RUN docker-php-ext-install mcrypt opcache pcntl
-
+	RUN docker-php-ext-install opcache
+	RUN docker-php-ext-install fileinfo
 	RUN docker-php-ext-install mysqli
-
 	RUN docker-php-ext-install pdo pdo_mysql
 
 	RUN docker-php-ext-install soap sockets
 	RUN docker-php-ext-install zip
 	RUN docker-php-ext-install xmlrpc
 	RUN docker-php-ext-install xml
+	RUN docker-php-ext-install tokenizer
 	# RUN docker-php-ext-install xml xmlreader xmlrpc xmlwriter xsl
 
 	RUN set -ex; \
