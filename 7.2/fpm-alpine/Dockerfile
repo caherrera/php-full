@@ -29,7 +29,7 @@ RUN set -ex; \
 	RUN docker-php-ext-install opcache
 	RUN docker-php-ext-install fileinfo
 	RUN docker-php-ext-install mysqli
-	RUN docker-php-ext-install pdo pdo_mysql
+	RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql
 
 	RUN docker-php-ext-install soap sockets
 	RUN docker-php-ext-install zip
