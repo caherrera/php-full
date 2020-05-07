@@ -19,6 +19,7 @@ RUN set -ex; \
 		git \
 	;
 	RUN docker-php-ext-configure curl;
+        RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd;
 	RUN docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;
 	RUN docker-php-ext-install bcmath
 	RUN docker-php-ext-install curl
