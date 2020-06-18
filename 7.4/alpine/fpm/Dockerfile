@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine
+FROM php:7.4-fpm-alpine
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
@@ -18,11 +18,16 @@ RUN set -ex; \
 		libmcrypt-dev \
 		git \
 		postgresql-dev \
+		libzip-dev \
+        zip \
+		libldap \
+		openldap-dev \
+		oniguruma-dev \
 	;
 
 	RUN docker-php-ext-configure curl;
 	RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd;
-	RUN docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr;
+	RUN docker-php-ext-configure gd --with-jpeg
 	
 	RUN docker-php-ext-install bcmath
 	RUN docker-php-ext-install curl
@@ -38,7 +43,10 @@ RUN set -ex; \
 	RUN docker-php-ext-install xmlrpc
 	RUN docker-php-ext-install xml
 	RUN docker-php-ext-install tokenizer
-	# RUN docker-php-ext-install xml xmlreader xmlrpc xmlwriter xsl
+
+	RUN docker-php-ext-configure ldap 
+    RUN docker-php-ext-install ldap
+	
 
 	RUN set -ex; \
 	runDeps="$( \
@@ -77,6 +85,9 @@ RUN apk add --no-cache \
 
 RUN rm -rf /tmp/* ~/.pearrc
 RUN rm -rf /usr/src/*
+RUN rm -rf /var/cache/apk/* 
+RUN docker-php-source delete
+
 
 VOLUME /var/www/html
 WORKDIR /var/www/html

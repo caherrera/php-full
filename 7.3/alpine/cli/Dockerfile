@@ -20,7 +20,9 @@ RUN set -ex; \
 		postgresql-dev \
 		libzip-dev \
         zip \
-		libldap2-dev \
+		libldap \
+		openldap-dev \
+		oniguruma-dev \
 	;
 
 	RUN docker-php-ext-configure curl;
@@ -43,7 +45,7 @@ RUN set -ex; \
 	RUN docker-php-ext-install tokenizer
 	# RUN docker-php-ext-install xml xmlreader xmlrpc xmlwriter xsl
 
-	RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
+	RUN docker-php-ext-configure ldap 
     RUN docker-php-ext-install ldap
 
 	RUN set -ex; \
