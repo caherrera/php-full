@@ -20,12 +20,14 @@ RUN set -ex; \
 		postgresql-dev \
 		libzip-dev \
         zip \
-		libldap2-dev \
+		libldap \
+		openldap-dev \
+		oniguruma-dev \
 	;
 
 	RUN docker-php-ext-configure curl;
 	RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd;
-	RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+	RUN docker-php-ext-configure gd --with-jpeg
 	
 	RUN docker-php-ext-install bcmath
 	RUN docker-php-ext-install curl
@@ -42,7 +44,7 @@ RUN set -ex; \
 	RUN docker-php-ext-install xml
 	RUN docker-php-ext-install tokenizer
 
-	RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
+	RUN docker-php-ext-configure ldap 
     RUN docker-php-ext-install ldap
 	
 
@@ -83,6 +85,9 @@ RUN apk add --no-cache \
 
 RUN rm -rf /tmp/* ~/.pearrc
 RUN rm -rf /usr/src/*
+RUN rm -rf /var/cache/apk/* 
+RUN docker-php-source delete
+
 
 VOLUME /var/www/html
 WORKDIR /var/www/html
