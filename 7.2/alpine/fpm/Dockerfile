@@ -78,7 +78,7 @@ RUN apk add --no-cache \
 RUN rm -rf /tmp/* ~/.pearrc
 RUN rm -rf /usr/src/*
 
-RUN docker-php-ext-install redis
+RUN docker-php-ext-enable redis
 VOLUME /var/www/html
 WORKDIR /var/www/html
 

@@ -88,6 +88,6 @@ RUN rm -rf /usr/src/*
 RUN rm -rf /var/cache/apk/* 
 RUN docker-php-source delete
 
-RUN docker-php-ext-install redis
+RUN docker-php-ext-enable redis
 WORKDIR /app
 
