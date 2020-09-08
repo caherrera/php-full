@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.4.10-fpm-alpine
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
@@ -87,8 +87,17 @@ RUN rm -rf /tmp/* ~/.pearrc
 RUN rm -rf /usr/src/*
 RUN rm -rf /var/cache/apk/* 
 RUN docker-php-source delete
-
-
 RUN docker-php-ext-enable redis
+
+RUN apk add --no-cache --virtual .build-deps \
+        libxml2-dev \
+        shadow \
+        autoconf \
+        g++ \
+        make \
+    && apk add --no-cache imagemagick-dev imagemagick \
+    && pecl install imagick-beta \
+    && apk del .build-deps
+
 VOLUME /var/www/html
 WORKDIR /var/www/html

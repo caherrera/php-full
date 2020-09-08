@@ -1,4 +1,4 @@
-FROM php:7.4-cli-alpine
+FROM php:7.4.10-cli-alpine
 
 # docker-entrypoint.sh dependencies
 RUN apk add --no-cache \
@@ -81,13 +81,21 @@ RUN set -ex \
     && rm -rf /tmp/*
 RUN apk add --no-cache \
 	git \
-	openssh-client
-
+	openssh-client ;
 RUN rm -rf /tmp/* ~/.pearrc
 RUN rm -rf /usr/src/*
 RUN rm -rf /var/cache/apk/* 
 RUN docker-php-source delete
-
 RUN docker-php-ext-enable redis
+RUN apk add --no-cache --virtual .build-deps \
+        libxml2-dev \
+        shadow \
+        autoconf \
+        g++ \
+        make \
+    && apk add --no-cache imagemagick-dev imagemagick \
+    && pecl install imagick-beta \
+    && apk del .build-deps
+
 WORKDIR /app
 
