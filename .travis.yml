@@ -1,34 +1,11 @@
 language: bash
 services: docker
 
-env:
-  # - VARIANT=7.0/fpm
-  - VARIANT=7.0/fpm-alpine
-  # - VARIANT=7.0/cli
-  # - VARIANT=7.1/fpm
-  - VARIANT=7.1/fpm-alpine
-  # - VARIANT=7.1/cli
-  # - VARIANT=7.2/fpm
-  - VARIANT=7.2/fpm-alpine
-  # - VARIANT=7.2/cli
-
-install:
-  - git clone https://github.com/docker-library/official-images.git ~/official-images
-
-before_script:
-  - env | sort
-  - wget -qO- 'https://github.com/tianon/pgp-happy-eyeballs/raw/master/hack-my-builds.sh' | bash
-  - cd "$VARIANT"
-  - slash='/'; image="wordpress:${VARIANT//$slash/-}"
+before_install:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 script:
-  - |
-    (
-      set -Eeuo pipefail
-      set -x
-      docker build -t "$image" .
-      ~/official-images/test/run.sh "$image"
-    )
+  - bash ./build.sh 
 
 after_script:
   - docker images

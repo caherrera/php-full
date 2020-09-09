@@ -96,6 +96,6 @@ RUN apk add --no-cache --virtual .build-deps \
     && apk add --no-cache imagemagick-dev imagemagick \
     && pecl install imagick-beta \
     && apk del .build-deps
-
+RUN docker-php-ext-enable imagick
 WORKDIR /app
 
