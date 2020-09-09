@@ -1,7 +1,19 @@
-# https://github.com/caherrera/php-full
+# Docker php-full
+[![Build Status](https://travis-ci.org/caherrera/php-full.svg?branch=master)](https://travis-ci.org/caherrera/php-full)
 
-## Maintained by: [Carlos Herrera](https://github.com/caherrera)
+This is the php image docker compiler with all extensions needed for Laravel, Wordpress and many others Frameworks/CMS based on PHP. 
 
-This is the Git repo of the [PHP-full](https://github.com/caherrera/php-full/) for [php](https://hub.docker.com/_/php/) See [the PHP-full Hub page](https://hub.docker.com/_/carlositline/php-full/) for the full readme on how to use this Docker image and for information regarding contributing and issues.
+Based on original docker [php images](https://hub.docker.com/_/php/) 
 
-The [full description from Docker Hub](https://hub.docker.com/_/carlositline/) 
+
+## Builds
+* php 7.4.10-fpm-alpine
+* php 7.4.10-cli-alpine
+
+
+
+## Maintained by: 
+- [Carlos Herrera](https://github.com/caherrera)
+
+## Licence
+MIT
