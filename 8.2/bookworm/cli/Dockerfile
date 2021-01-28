@@ -1,16 +1,10 @@
-#
-# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
-#
-# PLEASE DO NOT EDIT IT DIRECTLY.
-#
-
-FROM php:7.4-cli
+FROM php:8.2-cli
 
 # persistent dependencies
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-# Ghostscript is required for rendering PDF previews
+        # Ghostscript is required for rendering PDF previews
 		ghostscript \
 	; \
 	rm -rf /var/lib/apt/lists/*
@@ -33,6 +27,7 @@ RUN set -ex; \
 		unixodbc \
 		libldap2-dev \
 		libpq-dev \
+        libxslt-dev \
 	; \
 	\
 	docker-php-ext-configure gd \
@@ -46,10 +41,10 @@ RUN set -ex; \
 		gd \
 		mysqli \
 		zip \
-	; \
-	pecl install imagick-3.4.4; \
+	; 
+RUN \    
+	pecl install imagick; \
 	docker-php-ext-enable imagick; \
-
 	\
 	docker-php-ext-install pdo; \
 	\
@@ -57,9 +52,14 @@ RUN set -ex; \
 	docker-php-ext-install pdo_mysql; \
 	\
 	docker-php-ext-install pdo_pgsql pgsql; \
-	\
-	docker-php-ext-install soap sockets xmlrpc xmlrpc tokenizer; \
-	\
+    docker-php-ext-install soap sockets; \
+    docker-php-ext-install xml; 
+
+RUN \ 	
+    EXTRA_CFLAGS="-I/usr/src/php" docker-php-ext-install xmlreader; 
+    #docker-php-ext-install xmlwriter xsl tokenizer; 
+    
+RUN set -eux; \
 	docker-php-source extract; \
 	{ \
 		echo '# https://github.com/docker-library/php/issues/103#issuecomment-271413933'; \
@@ -69,47 +69,35 @@ RUN set -ex; \
 	} > temp.m4; \
 	mv temp.m4 /usr/src/php/ext/odbc/config.m4; \
 	\
-	docker-php-ext-configure odbc \
-		--with-unixODBC=shared,/usr; \
-	\
-	docker-php-ext-install odbc; \
-	\
-	docker-php-ext-configure pdo_odbc \
-		--with-pdo-odbc=unixodbc,/usr \
-	; \
-	\
-	docker-php-ext-install pdo_odbc; \
-	\
-	docker-php-ext-install \
-	  zip \
-	  xmlrpc \
-	  xml \
-	  tokenizer \
-	; \
+    docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr/;\
+    docker-php-ext-install pdo_odbc \
+    && cd /usr/src/php/ext/odbc \
+    && phpize \
+    && sed -ri 's@^ *test +"\$PHP_.*" *= *"no" *&& *PHP_.*=yes *$@#&@g' configure \
+    && ./configure --with-unixODBC=shared,/usr \
+    && docker-php-ext-install odbc;	\
 	\
 	docker-php-ext-configure ldap ; \
-	\
-	docker-php-ext-install ldap ; \
-	\
-# reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
-	apt-mark auto '.*' > /dev/null; \
-	apt-mark manual $savedAptMark; \
-	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
-		| awk '/=>/ { print $3 }' \
-		| sort -u \
-		| xargs -r dpkg-query -S \
-		| cut -d: -f1 \
-		| sort -u \
-		| xargs -rt apt-mark manual; \
-	\
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	docker-php-ext-install ldap ; 
+RUN set -eux; \
+    # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
+	# apt-mark auto '.*' > /dev/null; \
+	# apt-mark manual $savedAptMark; \
+	# ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
+	# 	| awk '/=>/ { print $3 }' \
+	# 	| sort -u \
+	# 	| xargs -r dpkg-query -S \
+	# 	| cut -d: -f1 \
+	# 	| sort -u \
+	# 	| xargs -rt apt-mark manual; \
+	# \
+	# apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	rm -rf /var/lib/apt/lists/*
-
+    
 RUN set -eux; \
 	pecl install xdebug; \
 	pecl install redis; \
-	docker-php-ext-enable imagick; \
-	docker-php-ext-enable redis;
+    docker-php-ext-enable redis;
 
 
 # set recommended PHP.ini settings
@@ -129,8 +117,6 @@ RUN set -ex \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /tmp/*
 
-# RUN set -eux; \
-# 	docker-php-ext-install curl fileinfo gd imap ldap mbstring mysqli oci8 odbc opcache pcntl pdo pdo_dblib pdo_firebird pdo_mysql pdo_oci pdo_odbc pdo_pgsql pdo_sqlite pgsql phar posix pspell readline reflection session shmop simplexml snmp soap sockets sodium spl standard sysvmsg sysvsem sysvshm tidy tokenizer xml xmlreader xmlrpc xmlwriter xsl zend_test zip;
 RUN docker-php-source delete;
-RUN ln -s /usr/lib/x86_64-linux-gnu/libodbccr.so.2 /usr/lib/x86_64-linux-gnu/libodbccr.so
+#RUN ln -s /usr/lib/x86_64-linux-gnu/libodbccr.so.2 /usr/lib/x86_64-linux-gnu/libodbccr.so
 WORKDIR /app
