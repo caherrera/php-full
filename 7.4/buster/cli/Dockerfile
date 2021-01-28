@@ -28,10 +28,11 @@ RUN set -ex; \
 		libpng-dev \
 		libzip-dev \
 		libcurl4-openssl-dev \
-		libxml2-dev \		
+		libxml2-dev \
 		unixodbc-dev \
 		unixodbc \
 		libldap2-dev \
+		libpq-dev \
 	; \
 	\
 	docker-php-ext-configure gd \
@@ -48,13 +49,17 @@ RUN set -ex; \
 	; \
 	pecl install imagick-3.4.4; \
 	docker-php-ext-enable imagick; \
-	
+
 	\
 	docker-php-ext-install pdo; \
 	\
 	docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd; \
 	docker-php-ext-install pdo_mysql; \
-	\	
+	\
+	docker-php-ext-install pdo_pgsql pgsql; \
+	\
+	docker-php-ext-install soap sockets xmlrpc xmlrpc tokenizer; \
+	\
 	docker-php-source extract; \
 	{ \
 		echo '# https://github.com/docker-library/php/issues/103#issuecomment-271413933'; \

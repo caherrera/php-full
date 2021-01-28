@@ -32,6 +32,7 @@ RUN set -ex; \
 		unixodbc-dev \
 		unixodbc \
 		libldap2-dev \
+		libpq-dev \
 	; \
 	\
 	docker-php-ext-configure gd \
@@ -54,6 +55,10 @@ RUN set -ex; \
 	\
 	docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd; \
 	docker-php-ext-install pdo_mysql; \
+	\
+	docker-php-ext-install pdo_pgsql pgsql; \
+	\
+	docker-php-ext-install soap sockets xmlrpc xmlrpc tokenizer; \
 	\
 	docker-php-source extract; \
 	{ \
