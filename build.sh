@@ -2,7 +2,7 @@
 
 docker_prefix="docker buildx build --platform linux/amd64,linux/arm64,linux/arm64/v8,linux/arm/v7,linux/arm/v6,linux/386 --push "
 
-for df in `find . -name Dockerfile`; do  
+for df in `find . -name Dockerfile| sort`; do  
     d=$(dirname $df)
     tag=$(echo $df | cut -d'/' -f2)
     os=$(echo $df | cut -d'/' -f3)
